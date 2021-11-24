@@ -1,52 +1,44 @@
 package main
 
 import (
-	//!handler
-
-	_handlerAdmin "minpro_arya/app/controllers/admin"
-
-	//!routes
-	_routes "minpro_arya/app/routes"
-
-	//!service
-	_ServAdmin "minpro_arya/bussiness/admin"
-
-	//!Repository
-	_repoAdmin "minpro_arya/drivers/mysql/admin"
-
-	//mysql
 	"log"
-	_dbDriver "minpro_arya/drivers/mysql"
 
-	// "github.com/labstack/echo/middleware"
+	_routes "minpro_arya/routes"
+
+	_adminService "minpro_arya/features/admins/bussiness"
+	_adminRepo "minpro_arya/features/admins/data"
+	_adminController "minpro_arya/features/admins/presentation"
+
+	_dbDriver "minpro_arya/config"
+
+	_driverFactory "minpro_arya/drivers"
+
+	_middleware "minpro_arya/middleware"
+
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func init() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath("./app/config/")
-	viper.AutomaticEnv()
-	viper.SetConfigType("json")
+	viper.SetConfigFile(`config/config.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
+	}
+
+	if viper.GetBool(`debug`) {
+		log.Println("Service RUN on DEBUG mode")
 	}
 }
 
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
-		&_repoAdmin.Admins{},
-		&_repoAdmin.Roles{},
+		&_adminRepo.Admins{},
 	)
-	roles := []_repoAdmin.Roles{{ID: 1, Name: "Owner"}, {ID: 2, Name: "Admin"}}
-	db.Create(&roles)
 }
 
 func main() {
-
 	configDB := _dbDriver.ConfigDB{
 		DB_Username: viper.GetString(`database.user`),
 		DB_Password: viper.GetString(`database.pass`),
@@ -56,21 +48,24 @@ func main() {
 	}
 	db := configDB.InitDB()
 	dbMigrate(db)
-	e := echo.New()
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}\n",
-	}))
 
-	//* factory of domain
-	// ?admin
-	adminRepo := _repoAdmin.NewMySQLRepository(db)
-	adminServe := _ServAdmin.NewadminService(adminRepo)
-	adminHandler := _handlerAdmin.NewUserController(adminServe)
-
-	//* initial of routes
-	routesInit := _routes.HandlerRoute{
-		AdminController: *adminHandler,
+	configJWT := _middleware.ConfigJWT{
+		SecretJWT:       viper.GetString(`jwt.secret`),
+		ExpiresDuration: int64(viper.GetInt(`jwt.expired`)),
 	}
+
+	e := echo.New()
+
+	adminRepo := _driverFactory.NewAdminRepository(db)
+	adminService := _adminService.NewServiceAdmin(adminRepo, 10, &configJWT)
+	adminCtrl := _adminController.NewHandlerAdmin(adminService)
+
+	routesInit := _routes.ControllerList{
+		JWTMiddleware:   configJWT.Init(),
+		AdminController: *adminCtrl,
+	}
+
 	routesInit.RouteRegister(e)
-	log.Fatal(e.Start(":8080"))
+
+	log.Fatal(e.Start(viper.GetString("server.address")))
 }
