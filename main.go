@@ -60,9 +60,9 @@ func main() {
 	adminService := _adminService.NewServiceAdmin(adminRepo, 10, &configJWT)
 	adminCtrl := _adminController.NewHandlerAdmin(adminService)
 
-	routesInit := _routes.ControllerList{
-		JWTMiddleware:   configJWT.Init(),
-		AdminController: *adminCtrl,
+	routesInit := _routes.RouteList{
+		JWTMiddleware: configJWT.Init(),
+		AdminRouter:   *adminCtrl,
 	}
 
 	routesInit.RouteRegister(e)

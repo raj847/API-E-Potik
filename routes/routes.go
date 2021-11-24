@@ -11,16 +11,16 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-type ControllerList struct {
-	JWTMiddleware   middleware.JWTConfig
-	AdminController admins.AdminHandler
+type RouteList struct {
+	JWTMiddleware middleware.JWTConfig
+	AdminRouter   admins.AdminHandler
 }
 
-func (cl *ControllerList) RouteRegister(e *echo.Echo) {
+func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	// Admins
 	admins := e.Group("admins")
-	admins.POST("/register", cl.AdminController.Register)
-	admins.POST("/login", cl.AdminController.Login)
+	admins.POST("/register", cl.AdminRouter.Register)
+	admins.POST("/login", cl.AdminRouter.Login)
 
 }
 
