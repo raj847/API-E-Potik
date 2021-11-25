@@ -7,6 +7,9 @@ import (
 	bussiness "minpro_arya/features/company/bussiness"
 	company "minpro_arya/features/company/presentation"
 	response "minpro_arya/features/company/presentation/response"
+	busssiness "minpro_arya/features/customer/bussiness"
+	customer "minpro_arya/features/customer/presentation"
+	responsee "minpro_arya/features/customer/presentation/response"
 	middlewareApp "minpro_arya/middleware"
 
 	"net/http"
@@ -16,9 +19,10 @@ import (
 )
 
 type RouteList struct {
-	JWTMiddleware middleware.JWTConfig
-	AdminRouter   admins.AdminHandler
-	CompanyRouter company.CompanyHandler
+	JWTMiddleware  middleware.JWTConfig
+	AdminRouter    admins.AdminHandler
+	CompanyRouter  company.CompanyHandler
+	CustomerRouter customer.CustomerHandler
 }
 
 func (cl *RouteList) RouteRegister(e *echo.Echo) {
@@ -31,6 +35,11 @@ func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	company := e.Group("company")
 	company.POST("/register", cl.CompanyRouter.Register)
 	company.POST("/login", cl.CompanyRouter.Login)
+
+	customer := e.Group("customer")
+	customer.POST("/register", cl.CustomerRouter.Register)
+	customer.POST("/login", cl.CustomerRouter.Login)
+	// customer.GET("/my-product", cl.TransHandler.GetAllCustomerTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
 
 }
 
@@ -57,6 +66,20 @@ func RoleValidationCompany() echo.MiddlewareFunc {
 				return hf(c)
 			} else {
 				return response.NewErrorResponse(c, http.StatusForbidden, bussiness.ErrUnathorized)
+			}
+		}
+	}
+}
+
+func RoleValidationCustomer() echo.MiddlewareFunc {
+	return func(hf echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			claims := middlewareApp.GetUser(c)
+
+			if claims.Role == "customer" || claims.Role == "admin" {
+				return hf(c)
+			} else {
+				return responsee.NewErrorResponse(c, http.StatusForbidden, busssiness.ErrUnathorized)
 			}
 		}
 	}
