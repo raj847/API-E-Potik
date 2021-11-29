@@ -1,93 +1,92 @@
-// package bussiness
+package bussiness
 
-// import (
-// 	"minpro_arya/features/product"
+import (
+	"minpro_arya/features/product"
+)
 
-// )
+type serviceProduct struct {
+	productRepository product.Repository
+}
 
-// type serviceProduct struct {
-// 	productRepository product.Repository
-// }
+func NewServiceProduct(repoProduct product.Repository) product.Service {
+	return &serviceProduct{
+		productRepository: repoProduct,
+	}
+}
 
-// func NewServiceEvent(repoEvent Repository) Service {
-// 	return &serviceEvent{
-// 		eventRepository: repoEvent,
-// 	}
-// }
+func (serv *serviceProduct) AllProduct() ([]product.Domain, error) {
 
-// func (serv *serviceEvent) AllEvent() ([]Domain, error) {
+	result, err := serv.productRepository.AllProduct()
 
-// 	result, err := serv.eventRepository.AllEvent()
+	if err != nil {
+		return []product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return []Domain{}, err
-// 	}
+	return result, nil
+}
 
-// 	return result, nil
-// }
+func (serv *serviceProduct) Create(orgID int, domain *product.Domain) (product.Domain, error) {
 
-// func (serv *serviceEvent) Create(orgID int, domain *Domain) (Domain, error) {
+	result, err := serv.productRepository.Create(orgID, domain)
 
-// 	result, err := serv.eventRepository.Create(orgID, domain)
+	if err != nil {
+		return product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return Domain{}, err
-// 	}
+	return result, nil
+}
 
-// 	return result, nil
-// }
+func (serv *serviceProduct) Update(orgID int, evID int, domain *product.Domain) (product.Domain, error) {
 
-// func (serv *serviceEvent) Update(orgID int, evID int, domain *Domain) (Domain, error) {
+	result, err := serv.productRepository.Update(orgID, evID, domain)
 
-// 	result, err := serv.eventRepository.Update(orgID, evID, domain)
+	if err != nil {
+		return product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return Domain{}, err
-// 	}
+	return result, nil
+}
 
-// 	return result, nil
-// }
+func (serv *serviceProduct) Delete(orgID int, id int) (string, error) {
 
-// func (serv *serviceEvent) Delete(orgID int, id int) (string, error) {
+	result, err := serv.productRepository.Delete(orgID, id)
 
-// 	result, err := serv.eventRepository.Delete(orgID, id)
+	if err != nil {
+		return "", ErrNotFound
+	}
 
-// 	if err != nil {
-// 		return "", business.ErrNotFound
-// 	}
+	return result, nil
+}
 
-// 	return result, nil
-// }
+func (serv *serviceProduct) MyProductByCompany(orgID int) ([]product.Domain, error) {
 
-// func (serv *serviceEvent) MyEventByOrganizer(orgID int) ([]Domain, error) {
+	result, err := serv.productRepository.MyProductByCompany(orgID)
 
-// 	result, err := serv.eventRepository.MyEventByOrganizer(orgID)
+	if err != nil {
+		return []product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return []Domain{}, err
-// 	}
+	return result, nil
+}
 
-// 	return result, nil
-// }
+func (serv *serviceProduct) ProductByID(id int) (product.Domain, error) {
 
-// func (serv *serviceEvent) EventByID(id int) (Domain, error) {
+	result, err := serv.productRepository.ProductByID(id)
 
-// 	result, err := serv.eventRepository.EventByID(id)
+	if err != nil {
+		return product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return Domain{}, err
-// 	}
+	return result, nil
+}
+func (serv *serviceProduct) ProductByIdCompany(orgzID int) ([]product.Domain, error) {
 
-// 	return result, nil
-// }
-// func (serv *serviceEvent) EventByIdOrganizer(orgzID int) ([]Domain, error) {
+	result, err := serv.productRepository.ProductByIdCompany(orgzID)
 
-// 	result, err := serv.eventRepository.EventByIdOrganizer(orgzID)
+	if err != nil {
+		return []product.Domain{}, err
+	}
 
-// 	if err != nil {
-// 		return []Domain{}, err
-// 	}
+	return result, nil
 
-// 	return result, nil
-
-// }
+}

@@ -10,6 +10,7 @@ import (
 	busssiness "minpro_arya/features/customer/bussiness"
 	customer "minpro_arya/features/customer/presentation"
 	responsee "minpro_arya/features/customer/presentation/response"
+	product "minpro_arya/features/product/presentation"
 	middlewareApp "minpro_arya/middleware"
 
 	"net/http"
@@ -23,6 +24,7 @@ type RouteList struct {
 	AdminRouter    admins.AdminHandler
 	CompanyRouter  company.CompanyHandler
 	CustomerRouter customer.CustomerHandler
+	ProductRouter  product.ProductHandler
 }
 
 func (cl *RouteList) RouteRegister(e *echo.Echo) {
@@ -30,16 +32,28 @@ func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	admins := e.Group("admins")
 	admins.POST("/register", cl.AdminRouter.Register)
 	admins.POST("/login", cl.AdminRouter.Login)
+	admins.DELETE("/delete-product/:id", cl.ProductRouter.Delete, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationAdmin())
 
 	// Company
 	company := e.Group("company")
 	company.POST("/register", cl.CompanyRouter.Register)
 	company.POST("/login", cl.CompanyRouter.Login)
 
+	company.POST("/create-product", cl.ProductRouter.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCompany())
+	company.PUT("/update-product/:id", cl.ProductRouter.Update, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCompany())
+	company.DELETE("/delete-product/:id", cl.ProductRouter.Delete, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCompany())
+	company.GET("/my-product", cl.ProductRouter.MyProductByCompany, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCompany())
+
+	//customer
 	customer := e.Group("customer")
 	customer.POST("/register", cl.CustomerRouter.Register)
 	customer.POST("/login", cl.CustomerRouter.Login)
 	// customer.GET("/my-product", cl.TransHandler.GetAllCustomerTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
+
+	//Product
+	e.GET("/product", cl.ProductRouter.AllProduct)
+	e.GET("/product/:id", cl.ProductRouter.ProductByID)
+	e.GET("/:companyID/product", cl.ProductRouter.ProductByIdCompany)
 
 }
 
