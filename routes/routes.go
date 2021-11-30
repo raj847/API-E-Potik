@@ -11,6 +11,7 @@ import (
 	customer "minpro_arya/features/customer/presentation"
 	responsee "minpro_arya/features/customer/presentation/response"
 	product "minpro_arya/features/product/presentation"
+	transactions "minpro_arya/features/transactions/presentation"
 	middlewareApp "minpro_arya/middleware"
 
 	"net/http"
@@ -25,6 +26,7 @@ type RouteList struct {
 	CompanyRouter  company.CompanyHandler
 	CustomerRouter customer.CustomerHandler
 	ProductRouter  product.ProductHandler
+	TransRouter    transactions.TransHandler
 }
 
 func (cl *RouteList) RouteRegister(e *echo.Echo) {
@@ -48,12 +50,17 @@ func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	customer := e.Group("customer")
 	customer.POST("/register", cl.CustomerRouter.Register)
 	customer.POST("/login", cl.CustomerRouter.Login)
-	// customer.GET("/my-product", cl.TransHandler.GetAllCustomerTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
+	customer.GET("/my-product", cl.TransRouter.GetAllUserTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
 
 	//Product
 	e.GET("/product", cl.ProductRouter.AllProduct)
 	e.GET("/product/:id", cl.ProductRouter.ProductByID)
 	e.GET("/:companyID/product", cl.ProductRouter.ProductByIdCompany)
+
+	//trans
+	e.POST("/transaction", cl.TransRouter.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
+	e.GET("/all-transactions", cl.TransRouter.GetAllTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationAdmin())
+	e.GET("/transaction/:id", cl.TransRouter.GetTransByID, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationAdmin())
 
 }
 

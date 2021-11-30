@@ -88,6 +88,7 @@ func (ctrl *ProductHandler) Delete(c echo.Context) error {
 	return response.NewSuccessResponse(c, result)
 
 }
+
 func (ctrl *ProductHandler) MyProductByCompany(c echo.Context) error {
 	orgzID := middleware.GetUser(c)
 
