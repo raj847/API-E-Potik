@@ -48,11 +48,11 @@ func (rep *MysqlProductRepository) AllProduct() ([]product.Domain, error) {
 
 }
 
-func (rep *MysqlProductRepository) Update(orgID int, prID int, domain *product.Domain) (product.Domain, error) {
+func (rep *MysqlProductRepository) Update(orgID int, prodID int, domain *product.Domain) (product.Domain, error) {
 	productUpdate := fromDomain(*domain)
 
-	productUpdate.ID = prID
-	result := rep.Conn.Where("id = ?", prID).Updates(&productUpdate)
+	productUpdate.ID = prodID
+	result := rep.Conn.Where("id = ?", prodID).Updates(&productUpdate)
 
 	if result.Error != nil {
 		return product.Domain{}, bussiness.ErrNotFound
