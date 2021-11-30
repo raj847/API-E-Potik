@@ -64,7 +64,7 @@ func (rep *MysqlProductRepository) Update(orgID int, prID int, domain *product.D
 func (rep *MysqlProductRepository) Delete(orgID int, id int) (string, error) {
 	rec := Product{}
 
-	find := rep.Conn.Where("company_id = ?", orgID).Where("id = ?", id).First(&rec)
+	find := rep.Conn.Where("id = ?", id).First(&rec)
 
 	if find.Error != nil {
 		return "", bussiness.ErrUnathorized
