@@ -36,9 +36,9 @@ func (serv *serviceProduct) Create(orgID int, domain *product.Domain) (product.D
 	return result, nil
 }
 
-func (serv *serviceProduct) Update(orgID int, evID int, domain *product.Domain) (product.Domain, error) {
+func (serv *serviceProduct) Update(orgID int, prodID int, domain *product.Domain) (product.Domain, error) {
 
-	result, err := serv.productRepository.Update(orgID, evID, domain)
+	result, err := serv.productRepository.Update(orgID, prodID, domain)
 
 	if err != nil {
 		return product.Domain{}, err
