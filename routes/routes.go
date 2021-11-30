@@ -10,6 +10,7 @@ import (
 	busssiness "minpro_arya/features/customer/bussiness"
 	customer "minpro_arya/features/customer/presentation"
 	responsee "minpro_arya/features/customer/presentation/response"
+	news "minpro_arya/features/news/presentation"
 	product "minpro_arya/features/product/presentation"
 	transactions "minpro_arya/features/transactions/presentation"
 	middlewareApp "minpro_arya/middleware"
@@ -27,6 +28,7 @@ type RouteList struct {
 	CustomerRouter customer.CustomerHandler
 	ProductRouter  product.ProductHandler
 	TransRouter    transactions.TransHandler
+	NewsRouter     news.NewsHandler
 }
 
 func (cl *RouteList) RouteRegister(e *echo.Echo) {
@@ -61,6 +63,9 @@ func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	e.POST("/transaction", cl.TransRouter.Create, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
 	e.GET("/all-transactions", cl.TransRouter.GetAllTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationAdmin())
 	e.GET("/transaction/:id", cl.TransRouter.GetTransByID, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationAdmin())
+
+	//news
+	e.GET("/news", cl.NewsRouter.GetNewsByCategory)
 
 }
 
