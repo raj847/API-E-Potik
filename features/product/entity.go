@@ -26,7 +26,7 @@ type Service interface {
 type Repository interface {
 	AllProduct() ([]Domain, error)
 	Create(orgID int, domain *Domain) (Domain, error)
-	Update(orgID int, evID int, domain *Domain) (Domain, error)
+	Update(orgID int, prodID int, domain *Domain) (Domain, error)
 	Delete(orgID, id int) (string, error)
 	MyProductByCompany(orgID int) ([]Domain, error)
 	ProductByID(id int) (Domain, error)
