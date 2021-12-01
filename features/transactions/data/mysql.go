@@ -16,12 +16,11 @@ func NewMysqlTransRepository(conn *gorm.DB) transactions.Repository {
 	}
 }
 
-func (rep *MysqlTransRepository) Trans(userID int, domain *transactions.Domain) (transactions.Domain, error) {
+func (rep *MysqlTransRepository) Trans(customerID int, domain *transactions.Domain) (transactions.Domain, error) {
 
 	tr := fromDomain(*domain)
 
-	tr.UserID = userID
-
+	tr.CustomerID = customerID
 	result := rep.Conn.Create(&tr)
 
 	if result.Error != nil {
@@ -58,11 +57,11 @@ func (rep *MysqlTransRepository) GetAllTrans() ([]transactions.Domain, error) {
 	return toDomainList(trans), nil
 }
 
-func (rep *MysqlTransRepository) GetAllUserTrans(userID int) ([]transactions.Domain, error) {
+func (rep *MysqlTransRepository) GetAllCustomerTrans(customerID int) ([]transactions.Domain, error) {
 
 	trans := []Transactions{}
 
-	result := rep.Conn.Where("user_id = ?", userID).Find(&trans)
+	result := rep.Conn.Where("customer_id = ?", customerID).Find(&trans)
 
 	if result.Error != nil {
 		return []transactions.Domain{}, result.Error

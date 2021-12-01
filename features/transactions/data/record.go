@@ -10,7 +10,7 @@ import (
 type Transactions struct {
 	gorm.Model
 	ID               int `gorm:"primary_key"`
-	UserID           int
+	CustomerID       int
 	ProductID        int
 	Transaction_Code string
 	CreatedAt        time.Time
@@ -20,7 +20,7 @@ type Transactions struct {
 func toDomain(tr Transactions) transactions.Domain {
 	return transactions.Domain{
 		ID:               tr.ID,
-		UserID:           tr.UserID,
+		CustomerID:       tr.CustomerID,
 		ProductID:        tr.ProductID,
 		Transaction_code: tr.Transaction_Code,
 		CreatedAt:        tr.CreatedAt,
@@ -31,7 +31,7 @@ func toDomain(tr Transactions) transactions.Domain {
 func fromDomain(domain transactions.Domain) Transactions {
 	return Transactions{
 		ID:               domain.ID,
-		UserID:           domain.UserID,
+		CustomerID:       domain.CustomerID,
 		ProductID:        domain.ProductID,
 		Transaction_Code: domain.Transaction_code,
 		CreatedAt:        domain.CreatedAt,

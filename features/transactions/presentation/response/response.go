@@ -51,7 +51,7 @@ func NewErrorResponse(c echo.Context, status int, err error) error {
 type CreateTransResponse struct {
 	Message          string `json:"message"`
 	ID               int    `json:"id"`
-	UserID           int    `json:"user_id"`
+	CustomerID       int    `json:"customer_id"`
 	ProductID        int    `json:"product_id"`
 	Transaction_code string `json:"transaction_code"`
 }
@@ -60,7 +60,7 @@ func FromDomainCreate(domain transactions.Domain) CreateTransResponse {
 	return CreateTransResponse{
 		Message:          "Transactions Success, Silahkan ambil pesanan anda pada apotik terdekat, Salam Sehat",
 		ID:               domain.ID,
-		UserID:           domain.UserID,
+		CustomerID:       domain.CustomerID,
 		ProductID:        domain.ProductID,
 		Transaction_code: domain.Transaction_code,
 	}
@@ -68,7 +68,7 @@ func FromDomainCreate(domain transactions.Domain) CreateTransResponse {
 
 type TransResponse struct {
 	ID               int    `json:"id"`
-	UserID           int    `json:"user_id"`
+	CustomerID       int    `json:"customer_id"`
 	ProductID        int    `json:"product_id"`
 	Transaction_code string `json:"transaction_code"`
 }
@@ -76,7 +76,7 @@ type TransResponse struct {
 func FromDomainAllTrans(domain transactions.Domain) TransResponse {
 	return TransResponse{
 		ID:               domain.ID,
-		UserID:           domain.UserID,
+		CustomerID:       domain.CustomerID,
 		ProductID:        domain.ProductID,
 		Transaction_code: domain.Transaction_code,
 	}

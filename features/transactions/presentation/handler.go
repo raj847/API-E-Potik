@@ -66,11 +66,11 @@ func (ctrl *TransHandler) GetTransByID(c echo.Context) error {
 	return response.NewSuccessResponse(c, response.FromDomainAllTrans(result))
 }
 
-func (ctrl *TransHandler) GetAllUserTrans(c echo.Context) error {
+func (ctrl *TransHandler) GetAllCustomerTrans(c echo.Context) error {
 
 	jwtGetID := middleware.GetUser(c)
 
-	result, err := ctrl.transService.GetAllUserTrans(jwtGetID.ID)
+	result, err := ctrl.transService.GetAllCustomerTrans(jwtGetID.ID)
 
 	if err != nil {
 		return response.NewErrorResponse(c, http.StatusBadRequest, err)
