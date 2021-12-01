@@ -13,6 +13,10 @@ import (
 	_companyRepo "minpro_arya/features/company/data"
 	_companyController "minpro_arya/features/company/presentation"
 
+	_customerService "minpro_arya/features/customer/bussiness"
+	_customerRepo "minpro_arya/features/customer/data"
+	_customerController "minpro_arya/features/customer/presentation"
+
 	_dbDriver "minpro_arya/config"
 
 	_driverFactory "minpro_arya/drivers"
@@ -40,6 +44,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&_adminRepo.Admins{},
 		&_companyRepo.Company{},
+		&_customerRepo.Customer{},
 	)
 }
 
@@ -69,10 +74,15 @@ func main() {
 	companyService := _companyService.NewServiceCompany(companyRepo, 10, &configJWT)
 	companyCtrl := _companyController.NewHandlerCompany(companyService)
 
+	customerRepo := _driverFactory.NewCustomerRepository(db)
+	customerService := _customerService.NewServiceCustomer(customerRepo, 10, &configJWT)
+	customerCtrl := _customerController.NewHandlerCustomer(customerService)
+
 	routesInit := _routes.RouteList{
-		JWTMiddleware: configJWT.Init(),
-		AdminRouter:   *adminCtrl,
-		CompanyRouter: *companyCtrl,
+		JWTMiddleware:  configJWT.Init(),
+		AdminRouter:    *adminCtrl,
+		CompanyRouter:  *companyCtrl,
+		CustomerRouter: *customerCtrl,
 	}
 
 	routesInit.RouteRegister(e)

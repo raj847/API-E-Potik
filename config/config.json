@@ -7,7 +7,7 @@
 		"timeout": 2
 	},
 	"database": {
-		"host": "127.0.0.1",
+		"host": "host.docker.internal",
 		"port": "3306",
 		"user": "root",
 		"pass": "",
@@ -16,5 +16,5 @@
 	"jwt": {
 		"secret": "minpro_arya",
 		"expired": 1
-	}
+	} 
 }
