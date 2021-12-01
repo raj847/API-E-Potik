@@ -52,7 +52,7 @@ func (cl *RouteList) RouteRegister(e *echo.Echo) {
 	customer := e.Group("customer")
 	customer.POST("/register", cl.CustomerRouter.Register)
 	customer.POST("/login", cl.CustomerRouter.Login)
-	customer.GET("/my-product", cl.TransRouter.GetAllUserTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
+	customer.GET("/my-product", cl.TransRouter.GetAllCustomerTrans, middleware.JWTWithConfig(cl.JWTMiddleware), RoleValidationCustomer())
 
 	//Product
 	e.GET("/product", cl.ProductRouter.AllProduct)

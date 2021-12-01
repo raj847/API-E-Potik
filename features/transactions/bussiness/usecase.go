@@ -15,13 +15,13 @@ func NewServiceTrans(repoTrans transactions.Repository) transactions.Service {
 	}
 }
 
-func (serv *serviceTrans) Trans(userID int, domain *transactions.Domain) (transactions.Domain, error) {
+func (serv *serviceTrans) Trans(customerID int, domain *transactions.Domain) (transactions.Domain, error) {
 
 	randCode, _ := randomcode.GenerateCode(8)
 
 	domain.Transaction_code = randCode
 
-	result, err := serv.transRepository.Trans(userID, domain)
+	result, err := serv.transRepository.Trans(customerID, domain)
 
 	if err != nil {
 		return transactions.Domain{}, ErrInternalServer
@@ -53,9 +53,9 @@ func (serv *serviceTrans) GetAllTrans() ([]transactions.Domain, error) {
 	return result, err
 }
 
-func (serv *serviceTrans) GetAllUserTrans(userID int) ([]transactions.Domain, error) {
+func (serv *serviceTrans) GetAllCustomerTrans(customerID int) ([]transactions.Domain, error) {
 
-	result, err := serv.transRepository.GetAllUserTrans(userID)
+	result, err := serv.transRepository.GetAllCustomerTrans(customerID)
 
 	if err != nil {
 		return []transactions.Domain{}, err
