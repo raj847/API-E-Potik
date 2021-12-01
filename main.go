@@ -25,6 +25,9 @@ import (
 	_transRepo "minpro_arya/features/transactions/data"
 	_transController "minpro_arya/features/transactions/presentation"
 
+	_newsRepo "minpro_arya/features/news/data"
+	_newsController "minpro_arya/features/news/presentation"
+
 	_dbDriver "minpro_arya/config"
 
 	_driverFactory "minpro_arya/drivers"
@@ -55,6 +58,7 @@ func dbMigrate(db *gorm.DB) {
 		&_customerRepo.Customer{},
 		&_productRepo.Product{},
 		&_transRepo.Transactions{},
+		&_newsRepo.Articles{},
 	)
 }
 
@@ -96,6 +100,9 @@ func main() {
 	transService := _transService.NewServiceTrans(transRepo)
 	transCtrl := _transController.NewHandlerProduct(transService)
 
+	newsRepo := _newsRepo.NewNewsApi()
+	newsCtrl := _newsController.NewNewsHandler(newsRepo)
+
 	routesInit := _routes.RouteList{
 		JWTMiddleware:  configJWT.Init(),
 		AdminRouter:    *adminCtrl,
@@ -103,6 +110,7 @@ func main() {
 		CustomerRouter: *customerCtrl,
 		ProductRouter:  *productCtrl,
 		TransRouter:    *transCtrl,
+		NewsRouter:     *newsCtrl,
 	}
 
 	routesInit.RouteRegister(e)
