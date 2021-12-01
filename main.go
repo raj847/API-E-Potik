@@ -17,6 +17,14 @@ import (
 	_customerRepo "minpro_arya/features/customer/data"
 	_customerController "minpro_arya/features/customer/presentation"
 
+	_productService "minpro_arya/features/product/bussiness"
+	_productRepo "minpro_arya/features/product/data"
+	_productController "minpro_arya/features/product/presentation"
+
+	_transService "minpro_arya/features/transactions/bussiness"
+	_transRepo "minpro_arya/features/transactions/data"
+	_transController "minpro_arya/features/transactions/presentation"
+
 	_dbDriver "minpro_arya/config"
 
 	_driverFactory "minpro_arya/drivers"
@@ -45,6 +53,8 @@ func dbMigrate(db *gorm.DB) {
 		&_adminRepo.Admins{},
 		&_companyRepo.Company{},
 		&_customerRepo.Customer{},
+		&_productRepo.Product{},
+		&_transRepo.Transactions{},
 	)
 }
 
@@ -78,11 +88,21 @@ func main() {
 	customerService := _customerService.NewServiceCustomer(customerRepo, 10, &configJWT)
 	customerCtrl := _customerController.NewHandlerCustomer(customerService)
 
+	productRepo := _driverFactory.NewProductRepository(db)
+	productService := _productService.NewServiceProduct(productRepo)
+	productCtrl := _productController.NewHandlerProduct(productService)
+
+	transRepo := _driverFactory.NewTransRepository(db)
+	transService := _transService.NewServiceTrans(transRepo)
+	transCtrl := _transController.NewHandlerProduct(transService)
+
 	routesInit := _routes.RouteList{
 		JWTMiddleware:  configJWT.Init(),
 		AdminRouter:    *adminCtrl,
 		CompanyRouter:  *companyCtrl,
 		CustomerRouter: *customerCtrl,
+		ProductRouter:  *productCtrl,
+		TransRouter:    *transCtrl,
 	}
 
 	routesInit.RouteRegister(e)

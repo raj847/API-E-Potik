@@ -7,9 +7,10 @@ import (
 	companyDB "minpro_arya/features/company/data"
 	"minpro_arya/features/customer"
 	customerDB "minpro_arya/features/customer/data"
-
-	// "minpro_arya/features/product"
-	// productDB "minpro_arya/features/product/data"
+	"minpro_arya/features/product"
+	productDB "minpro_arya/features/product/data"
+	"minpro_arya/features/transactions"
+	transDB "minpro_arya/features/transactions/data"
 
 	"gorm.io/gorm"
 )
@@ -23,7 +24,9 @@ func NewCompanyRepository(conn *gorm.DB) company.Repository {
 func NewCustomerRepository(conn *gorm.DB) customer.Repository {
 	return customerDB.NewMysqlCustomerRepository(conn)
 }
-
-// func NewProductRepository(conn *gorm.DB) product.Repository {
-// 	return productDB.NewMysqlProductRepository(conn)
-// }
+func NewProductRepository(conn *gorm.DB) product.Repository {
+	return productDB.NewMysqlProductRepository(conn)
+}
+func NewTransRepository(conn *gorm.DB) transactions.Repository {
+	return transDB.NewMysqlTransRepository(conn)
+}
