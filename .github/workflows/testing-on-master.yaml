@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: create db
         run: |
-          sudo apt-get update
+          apt-get update
           apt-get install -y mariadb-client
           mysql --host mysql -u9WANzAilEI -pdEEFvbzuGM -e "CREATE DATABASE IF NOT EXISTS 9WANzAilEI"
       - name: running unitest
