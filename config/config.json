@@ -7,11 +7,11 @@
 		"timeout": 2
 	},
 	"database": {
-		"host": "127.0.0.1",
+		"host": "remotemysql.com",
 		"port": "3306",
-		"user": "root",
-		"pass": "",
-		"name": "epotik"
+		"user": "9WANzAilEI",
+		"pass": "dEEFvbzuGM",
+		"name": "9WANzAilEI"
 	},
 	"jwt": {
 		"secret": "minpro_arya",
