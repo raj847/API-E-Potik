@@ -1,17 +1,17 @@
 {
 	"debug": true,
 	"server": {
-		"address": ":8080"
+		"address": ":8000"
 	},
 	"context": {
 		"timeout": 2
 	},
 	"database": {
-		"host": "remotemysql.com",
+		"host": "epotik.cvtknwsvykds.us-east-2.rds.amazonaws.com",
 		"port": "3306",
-		"user": "9WANzAilEI",
-		"pass": "dEEFvbzuGM",
-		"name": "9WANzAilEI"
+		"user": "admin",
+		"pass": "susanti123",
+		"name": "epotik"
 	},
 	"jwt": {
 		"secret": "minpro_arya",
