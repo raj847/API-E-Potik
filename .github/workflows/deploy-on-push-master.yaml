@@ -14,5 +14,5 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "minprogo" #Must be unique in Heroku
-          heroku_email: "111201911847@mhs.dinus.ac.id"
+          heroku_app_name: "golangminpro" #Must be unique in Heroku
+          heroku_email: "aryadevaraj19@gmail.com"
